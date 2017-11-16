@@ -1,0 +1,105 @@
+{
+  "Width": 0.65,
+  "JumpWidth": 0.5,
+  "Map": [
+    {
+      "MapType": "Normal",
+      "Tiles": [
+        {
+          "TileType": "None",
+          "Time": 2.0
+        },
+        {
+          "TileType": "Normal",
+          "Time": 3.0
+        },
+        {
+          "TileType": "Normal",
+          "Time": 4.0
+        }
+      ]
+    },
+    {
+      "MapType": "Rotate",
+      "RotateAxis": "Z",
+      "RotatePoint": "Start",
+      "RotateSpeed": 15.0,
+      "Tiles": [
+        {
+          "TileType": "None",
+          "Time": 5.0
+        },
+        {
+          "TileType": "Normal",
+          "Time": 6.0
+        },
+        {
+          "TileType": "Normal",
+          "Time": 7.0
+        },
+        {
+          "TileType": "Normal",
+          "Time": 8.0
+        }
+      ]
+    },
+    {
+      "MapType": "Normal",
+      "Tiles": [
+        {
+          "TileType": "None",
+          "Time": 9.0
+        },
+        {
+          "TileType": "Normal",
+          "Time": 10.0
+        },
+        {
+          "TileType": "Normal",
+          "Time": 11.0
+        }
+      ]
+    },
+    {
+      "MapType": "Rotate",
+      "RotateAxis": "Y",
+      "RotatePoint": "Middle",
+      "RotateSpeed": 30.0,
+      "Tiles": [
+        {
+          "TileType": "None",
+          "Time": 12.0
+        },
+        {
+          "TileType": "Normal",
+          "Time": 13.0
+        },
+        {
+          "TileType": "Normal",
+          "Time": 14.0
+        },
+        {
+          "TileType": "Normal",
+          "Time": 15.0
+        }
+      ]
+    },
+    {
+      "MapType": "Normal",
+      "Tiles": [
+        {
+          "TileType": "None",
+          "Time": 17.0
+        },
+        {
+          "TileType": "Normal",
+          "Time": 18.0
+        },
+        {
+          "TileType": "Normal",
+          "Time": 19.0
+        }
+      ]
+    }
+  ]
+}

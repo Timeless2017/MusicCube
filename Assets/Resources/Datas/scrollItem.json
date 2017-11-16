@@ -1,0 +1,17 @@
+{
+  "loop": "true",
+  "isAutoScroll": "false",
+  "imageMoveTime": 0.5,
+  "autoScrollIntervalTime": 5.0,
+  "useNetTexture": "false",
+  "spritePathArray": [
+    "Sprites/C2",
+    "Sprites/C3",
+    "Sprites/C4",
+    "Sprites/C5",
+    "Sprites/C2",
+    "Sprites/C3",
+    "Sprites/C4",
+    "Sprites/C5"
+  ]
+}

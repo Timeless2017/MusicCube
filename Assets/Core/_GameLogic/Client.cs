@@ -40,7 +40,7 @@ public class Client : Singleton<Client> {
 
 	public void Update () {
         //mapManager.Update();
-
+        GlobalDispatcher.Instance.dispatchEvent<float>(EventName.GameLoop, Time.deltaTime);
     }
 
     private void CreatePlayer()

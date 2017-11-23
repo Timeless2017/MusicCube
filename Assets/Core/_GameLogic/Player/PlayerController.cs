@@ -12,7 +12,8 @@ public enum PlayerState
 public class PlayerController {
 
     private bool isLeft = false;
-    public float speed = 1f;
+    private float speed = PlayerModel.Instance.Speed;
+    private float standJumpTime = PlayerModel.Instance.StandJumpTime;
 
     private GameObject _root;
 
@@ -22,7 +23,7 @@ public class PlayerController {
     private RaycastHit hit;
     //射线检测不到地面的时间
     private float rayNoGround;
-    private float noGorundToDropTime = 0.3f;
+    private float noGorundToDropTime;
     
     private Rigidbody m_rigidbody;
 
@@ -33,15 +34,29 @@ public class PlayerController {
 
     private float time;
 
+    public void CreatePlayer(string playerModelPath)
+    {
+        GameObject player = new GameObject("Player");
+        player.transform.position = Vector3.zero;
+        GameObject playerPrefab = ResourcesManager.Instance.LoadPrefab(playerModelPath);
+        GameObject playerModel = GameObject.Instantiate(playerPrefab);
+        playerModel.transform.SetParent(player.transform);
+        playerModel.transform.localPosition = Vector3.zero;
+        playerModel.transform.localEulerAngles = new Vector3(0, 180, 0);
+        Init(player);
+    }
 
-	void Update () {
+	public void Update () {
 
         switch (state)
         {
             case PlayerState.Run:
+                noGorundToDropTime = 0.3f;
                 _root.transform.Translate(Vector3.forward * Time.deltaTime * speed);
                 break;
             case PlayerState.Jump:
+                noGorundToDropTime = standJumpTime;
+                JumpUpdate();
                 break;
             case PlayerState.Fly:
                 break;
@@ -117,7 +132,9 @@ public class PlayerController {
 
     #region 角色跳跃
 
-    private Vector3 jumpTargetPos;
+    private bool isLeftJump;
+    private float lastJumpTime;
+    private Vector3 startJumpPos;
 
     /// <summary>
     /// 开始跳
@@ -127,21 +144,38 @@ public class PlayerController {
         //只有角色在行走的时候才可以开始跳，在跳跃过程中或飞行中则不行（可能会改）
         if (state != PlayerState.Run)
             return;
+        this.isLeftJump = isLeftJump;
         state = PlayerState.Jump;
-        if (isLeftJump)
-        {
-            //jumpTargetPos = transform.position + -transform.right * 
-        }
-        else
-        {
-
-        }
-
+        startJumpPos = _root.transform.position;
+        lastJumpTime = Time.time;
     }
 
     private void JumpUpdate()
     {
+        if (state != PlayerState.Jump)
+            return;
+        float jumpedTime = Time.time - lastJumpTime;
 
+        //高度
+        float height;
+        if (jumpedTime <= standJumpTime / 2)
+            height = 9.8f * jumpedTime * jumpedTime / 2;
+        else
+            height = 9.8f * (standJumpTime - jumpedTime) * (standJumpTime - jumpedTime) / 2;
+        if (isLeftJump)
+        {
+            _root.transform.position = startJumpPos + _root.transform.up * height - _root.transform.right * speed * jumpedTime;
+        }
+        else
+        {
+            _root.transform.position = startJumpPos + _root.transform.up * height + _root.transform.right * speed * jumpedTime;
+        }
+        //跳跃结束
+        if (jumpedTime >= standJumpTime)
+        {
+            _root.transform.position = new Vector3(_root.transform.position.x, startJumpPos.y, _root.transform.position.z);
+            state = PlayerState.Run;
+        }
     }
 
 #endregion

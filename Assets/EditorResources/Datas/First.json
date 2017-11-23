@@ -1,21 +1,36 @@
 {
-  "Width": 0.65,
-  "JumpWidth": 0.5,
+  "Width": 0.6,
   "Map": [
     {
       "MapType": "Normal",
       "Tiles": [
         {
           "TileType": "None",
-          "Time": 2.0
+          "Time": 1.7
         },
         {
           "TileType": "Normal",
-          "Time": 3.0
+          "Time": 2.1
         },
         {
           "TileType": "Normal",
-          "Time": 4.0
+          "Time": 2.65
+        },
+        {
+          "TileType": "Normal",
+          "Time": 3.2
+        },
+        {
+          "TileType": "Normal",
+          "Time": 3.75
+        },
+        {
+          "TileType": "Normal",
+          "Time": 4.3
+        },
+        {
+          "TileType": "Normal",
+          "Time": 4.85
         }
       ]
     },
@@ -27,19 +42,23 @@
       "Tiles": [
         {
           "TileType": "None",
-          "Time": 5.0
+          "Time": 5.4
         },
         {
           "TileType": "Normal",
-          "Time": 6.0
+          "Time": 5.95
         },
         {
           "TileType": "Normal",
-          "Time": 7.0
+          "Time": 6.5
         },
         {
           "TileType": "Normal",
-          "Time": 8.0
+          "Time": 7.1
+        },
+        {
+          "TileType": "Normal",
+          "Time": 7.7
         }
       ]
     },
@@ -48,15 +67,23 @@
       "Tiles": [
         {
           "TileType": "None",
-          "Time": 9.0
+          "Time": 8.25
         },
         {
           "TileType": "Normal",
-          "Time": 10.0
+          "Time": 8.8
         },
         {
           "TileType": "Normal",
-          "Time": 11.0
+          "Time": 9.4
+        },
+        {
+          "TileType": "Normal",
+          "Time": 9.95
+        },
+        {
+          "TileType": "Normal",
+          "Time": 10.6
         }
       ]
     },
@@ -64,23 +91,27 @@
       "MapType": "Rotate",
       "RotateAxis": "Y",
       "RotatePoint": "Middle",
-      "RotateSpeed": 30.0,
+      "RotateSpeed": 20.0,
       "Tiles": [
         {
           "TileType": "None",
-          "Time": 12.0
+          "Time": 11.1
         },
         {
           "TileType": "Normal",
-          "Time": 13.0
+          "Time": 11.65
         },
         {
           "TileType": "Normal",
-          "Time": 14.0
+          "Time": 12.2
         },
         {
           "TileType": "Normal",
-          "Time": 15.0
+          "Time": 12.85
+        },
+        {
+          "TileType": "Normal",
+          "Time": 13.4
         }
       ]
     },
@@ -89,15 +120,27 @@
       "Tiles": [
         {
           "TileType": "None",
-          "Time": 17.0
+          "Time": 14.0
         },
         {
           "TileType": "Normal",
-          "Time": 18.0
+          "Time": 14.6
         },
         {
           "TileType": "Normal",
-          "Time": 19.0
+          "Time": 15.15
+        },
+        {
+          "TileType": "LeftJump",
+          "Time": 15.65
+        },
+        {
+          "TileType": "Normal",
+          "Time": 16.25
+        },
+        {
+          "TileType": "Normal",
+          "Time": 16.8
         }
       ]
     }

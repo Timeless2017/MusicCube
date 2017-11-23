@@ -14,10 +14,12 @@ public class ClientEntry : MonoBehaviour {
     void Start () {
         bgAudioSource = transform.Find("AudioBackground").GetComponent<AudioSource>();
         uiAudioSource = transform.Find("AudioUI").GetComponent<AudioSource>();
+        AudioManager.Instance.Init(bgAudioSource, uiAudioSource);
 
         ResourcesManager.Instance.useAssetsBundleInEditor = useAssetsBundleInEditor;
 
         Client.Instance.Init(this);
+        Camera.main.GetComponent<Animator>().speed = 0;
 
         DontDestroyOnLoad(this);
 

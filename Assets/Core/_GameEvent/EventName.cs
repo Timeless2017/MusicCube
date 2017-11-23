@@ -3,6 +3,8 @@
 public enum EventName {
 
     GameStart, //加载场景前
+    GameLoop,
 
     ShowStartView,
+    EnterGame,
 }

@@ -191,9 +191,11 @@ public class MapItem
         //当左右跳是生成的瓷砖会稍微长一些
         if(tileType == TileType.LeftJump || tileType  == TileType.RightJump)
         {
-            cube.transform.localScale = new Vector3(mapMgr.tileWidth, 0.1f, distance + 0.4f);
+            targetPos = mapMgr.mapCreatePoint.position + mapMgr.mapCreatePoint.forward * (distance - mapMgr.speed * PlayerModel.Instance.StandJumpTime);
+            cube.transform.localScale = new Vector3(mapMgr.tileWidth, 0.1f, distance + mapMgr.speed * (0.4f - PlayerModel.Instance.StandJumpTime)) +
+            mapMgr.mapCreatePoint.forward * mapMgr.tileWidth / 2;
             cube.transform.position = mapMgr.mapCreatePoint.position + (targetPos - mapMgr.mapCreatePoint.position) / 2 +
-            mapMgr.mapCreatePoint.forward * (mapMgr.tileWidth / 2 - 0.2f);
+                mapMgr.mapCreatePoint.forward * mapMgr.tileWidth / 2 - mapMgr.mapCreatePoint.forward * mapMgr.speed * 0.2f;
         }
         if (mapType == MapType.Rotate)
         {
@@ -227,11 +229,11 @@ public class MapItem
                 break;
             case TileType.LeftJump:
                 mapMgr.mapCreatePoint.position = mapMgr.mapCreatePoint.position -
-                    mapMgr.mapCreatePoint.right * (mapMgr.jumpWidth + mapMgr.tileWidth);
+                    mapMgr.mapCreatePoint.right * mapMgr.jumpWidth;
                 break;
             case TileType.RightJump:
                 mapMgr.mapCreatePoint.position = mapMgr.mapCreatePoint.position +
-    mapMgr.mapCreatePoint.right * (mapMgr.jumpWidth + mapMgr.tileWidth);
+    mapMgr.mapCreatePoint.right * mapMgr.jumpWidth;
                 break;
         }
     }

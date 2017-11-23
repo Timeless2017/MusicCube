@@ -10,4 +10,5 @@ public enum UIPanelID
     StartView,
     MainBackgroundView,
     LevelView,
+    GameView,
 }

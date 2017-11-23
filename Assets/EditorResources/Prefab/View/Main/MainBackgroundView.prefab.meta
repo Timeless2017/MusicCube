@@ -1,8 +1,8 @@
 fileFormatVersion: 2
 guid: eb416618582ace14798a81d31690d711
-timeCreated: 1511249003
+timeCreated: 1511358550
 licenseType: Free
 NativeFormatImporter:
   userData: 
-  assetBundleName: 
-  assetBundleVariant: 
+  assetBundleName: prefab/view/main
+  assetBundleVariant: assetbundle

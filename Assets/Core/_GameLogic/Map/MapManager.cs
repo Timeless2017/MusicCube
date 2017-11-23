@@ -34,7 +34,7 @@ public class MapManager {
     public bool isLeft = false;
     public bool firstTile = true;
 
-    public float speed = 1.0f;
+    public float speed = PlayerModel.Instance.Speed;
     public float mapTime = 0f;
     public float tileWidth;
     public float jumpWidth;
@@ -58,11 +58,11 @@ public class MapManager {
     /// <param name="mapPath"></param>
     public void ReadJsonAndInit(string mapPath)
     {
-        string jsonText = Resources.Load<TextAsset>(mapPath).text;
+        string jsonText = ResourcesManager.Instance.LoadAssetByFullName<TextAsset>(mapPath).text;
         JsonData rootData = JsonMapper.ToObject(jsonText);
 
         tileWidth = (float)(double)rootData["Width"];
-        jumpWidth = (float)(double)rootData["JumpWidth"];
+        jumpWidth = PlayerModel.Instance.Speed * PlayerModel.Instance.StandJumpTime;
 
         //用来控制地图生成的位置与方向
         mapCreatePoint = new GameObject("MapCreatePoint").transform;

@@ -1,0 +1,49 @@
+ManifestFileVersion: 0
+CRC: 2950457425
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: a5aeca9b17a932a1eaba4488b314c74d
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: d4e22bca998c188582dba61b6c905222
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+Assets:
+- Assets/EditorResources/Prefab/Player/cube_icecube.prefab
+- Assets/EditorResources/Prefab/Player/cube_hamburger.prefab
+- Assets/EditorResources/Prefab/Player/cube_fruit.prefab
+- Assets/EditorResources/Prefab/Player/cube_mushroom.prefab
+- Assets/EditorResources/Prefab/Player/cube_sushi.prefab
+- Assets/EditorResources/Prefab/Player/cube_watermelon.prefab
+- Assets/EditorResources/Prefab/Player/cube_bread.prefab
+- Assets/EditorResources/Prefab/Player/cube_fruit (1).prefab
+- Assets/EditorResources/Prefab/Player/cube_dice.prefab
+- Assets/EditorResources/Prefab/Player/cube_box.prefab
+- Assets/EditorResources/Prefab/Player/cube_cake.prefab
+- Assets/EditorResources/Prefab/Player/cube_safe.prefab
+- Assets/EditorResources/Prefab/Player/cube_jar.prefab
+- Assets/EditorResources/Prefab/Player/cube_cheese.prefab
+- Assets/EditorResources/Prefab/Player/cube_brick.prefab
+- Assets/EditorResources/Prefab/Player/cube_battery.prefab
+- Assets/EditorResources/Prefab/Player/cube_books.prefab
+- Assets/EditorResources/Prefab/Player/cube_car.prefab
+- Assets/EditorResources/Prefab/Player/cube_toster.prefab
+- Assets/EditorResources/Prefab/Player/cube_pilis.prefab
+Dependencies: []

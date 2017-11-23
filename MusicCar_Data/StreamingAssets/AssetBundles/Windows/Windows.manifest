@@ -1,0 +1,34 @@
+ManifestFileVersion: 0
+CRC: 1554753759
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: datas.assetbundle
+      Dependencies: {}
+    Info_1:
+      Name: sprite.assetbundle
+      Dependencies: {}
+    Info_2:
+      Name: prefab/player.assetbundle
+      Dependencies: {}
+    Info_3:
+      Name: prefab/view/start.assetbundle
+      Dependencies: {}
+    Info_4:
+      Name: prefab/view/main.assetbundle
+      Dependencies:
+        Dependency_0: sprite/musiccar.assetbundle
+        Dependency_1: sprite/ui.assetbundle
+    Info_5:
+      Name: prefab/view/game.assetbundle
+      Dependencies:
+        Dependency_0: sprite/ui.assetbundle
+    Info_6:
+      Name: sprite/musiccar.assetbundle
+      Dependencies: {}
+    Info_7:
+      Name: sprite/ui.assetbundle
+      Dependencies: {}
+    Info_8:
+      Name: audio.assetbundle
+      Dependencies: {}

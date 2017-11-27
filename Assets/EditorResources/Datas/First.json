@@ -127,10 +127,6 @@
           "Time": 14.6
         },
         {
-          "TileType": "Normal",
-          "Time": 15.15
-        },
-        {
           "TileType": "LeftJump",
           "Time": 15.65
         },

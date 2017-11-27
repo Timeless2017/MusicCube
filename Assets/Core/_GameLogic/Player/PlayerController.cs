@@ -73,8 +73,6 @@ public class PlayerController {
         {
             m_rigidbody = _root.AddComponent<Rigidbody>();
         }
-
-
         if(onTheGround && _root.transform.parent != hit.collider.transform.parent)
         {
             _root.transform.SetParent(hit.collider.transform.parent);

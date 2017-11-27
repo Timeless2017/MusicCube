@@ -1,4 +1,5 @@
 {
-"PlayerSpeed":2.0,
-"StandJumpTime":0.6
+  "PlayerSpeed": 2.0,
+  "StandJumpTime": 0.6,
+  "JumpDeviationTime": 0.3
 }

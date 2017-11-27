@@ -1,37 +1,31 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.Events;
 
-public enum TestEventType    
-{
-    Test1,
-    Test2,
-}
+
+
 
 public class Test : MonoBehaviour {
 
-    EventTrigger eventTrigger;
-
+    MapManager mapManager;
+    PlayerController playerController;
     void Start () {
-        eventTrigger = gameObject.AddComponent<EventTrigger>();
-        EventTrigger.Entry myClick = new EventTrigger.Entry();
-        myClick.eventID = EventTriggerType.PointerClick;    
-        UnityAction<BaseEventData> callback = new UnityAction<BaseEventData>(Test1);
-        myClick.callback.AddListener(callback);
-
-        eventTrigger.triggers.Add(myClick);
+        PlayerModel.Instance.Initialize();
+        playerController = new PlayerController();
+        mapManager = new MapManager();
+        mapManager.ReadJsonAndInit("Datas/First.json");
+        playerController.CreatePlayer("Player/cube_car");
     }
-      
 
-    public void Test1(BaseEventData date)
+    private void OnGUI()
     {
-        Debug.Log("Click");
+        GUI.Label(new Rect(10, 10, 100, 30), Time.time.ToString());
     }
+
 
     void Update()
     {
-        
+        playerController.Update();
+        mapManager.Update();
     }
 }

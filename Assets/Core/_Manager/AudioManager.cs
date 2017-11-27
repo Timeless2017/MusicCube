@@ -23,6 +23,14 @@ public class AudioManager : Singleton<AudioManager>
         _ui.mute = isMute;
     }
 
+    public void SetPause(bool isPause)
+    {
+        if (isPause)
+            _background.Pause();
+        else
+            _background.UnPause();
+    }
+
     public void Init(AudioSource background, AudioSource ui)
     {
         _background = background;

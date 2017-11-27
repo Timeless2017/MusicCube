@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class Client : Singleton<Client> {
 
-    //private GameObject pfb_Player;
-
-    //private MapManager mapManager;
-    //private PlayerController player;
     private ClientEntry clientEntry;
 
     public bool inited = false;
@@ -25,21 +21,7 @@ public class Client : Singleton<Client> {
         GlobalDispatcher.Instance.dispatchEvent(EventName.ShowStartView);
     }
 
-    void Start () {
-
-        //pfb_Player = Resources.Load<GameObject>("");
-        //GameObject go_Player = new GameObject("Player");
-
-
-        //player = new PlayerController();
-        //mapManager = new MapManager();
-        //player.Init(go_Player);
-        //mapManager.ReadJsonAndInit("Datas/music1");
-	}
-	
-
 	public void Update () {
-        //mapManager.Update();
         GlobalDispatcher.Instance.dispatchEvent<float>(EventName.GameLoop, Time.deltaTime);
     }
 

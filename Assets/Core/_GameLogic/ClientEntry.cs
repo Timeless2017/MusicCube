@@ -19,10 +19,8 @@ public class ClientEntry : MonoBehaviour {
         ResourcesManager.Instance.useAssetsBundleInEditor = useAssetsBundleInEditor;
 
         Client.Instance.Init(this);
-        Camera.main.GetComponent<Animator>().speed = 0;
 
         DontDestroyOnLoad(this);
-
     }
 	
 

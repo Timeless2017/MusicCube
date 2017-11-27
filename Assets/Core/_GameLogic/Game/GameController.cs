@@ -30,7 +30,8 @@ public class GameController : SingletonController<GameController>{
         mapManager.ReadJsonAndInit("Datas/" + mapId.ToString() + ".json");
         playerCtrl = new PlayerController();
         playerCtrl.CreatePlayer("Player/cube_car");
-        
+        AudioManager.Instance.PlayBackground("Audio/" + mapId.ToString() + ".mp3");
+        Camera.main.GetComponent<Animator>().SetTrigger(mapId.ToString());
         SetGamePause(true);
     }
 
@@ -39,14 +40,13 @@ public class GameController : SingletonController<GameController>{
         if (pause)
         {
             Time.timeScale = 0;
-            AudioManager.Instance.SetMute(true);
+            AudioManager.Instance.SetPause(pause);
+            Camera.main.GetComponent<Animator>().speed = 0;
         }
         else
         {
             Time.timeScale = 1;
-            AudioManager.Instance.SetMute(false);
-            AudioManager.Instance.PlayBackground("Audio/First.mp3");
-
+            AudioManager.Instance.SetPause(pause);
             Camera.main.GetComponent<Animator>().speed = 1;
         }
     }
@@ -62,8 +62,11 @@ public class GameController : SingletonController<GameController>{
             if (offsetTime <= 0)
                 playerCtrl.Update();
         }
-        
-        Debug.Log(playTime);
+    }
+
+    public void PlayerAudioDelay()
+    {
+
     }
 
 }

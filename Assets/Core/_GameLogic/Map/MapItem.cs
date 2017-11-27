@@ -8,6 +8,7 @@ public class MapItem
 {
 
     private MapType mapType;
+    private JsonData tiles;
     private MapManager mapMgr;
     private Transform mapItem;
 
@@ -16,62 +17,120 @@ public class MapItem
         this.mapMgr = mapManager;
     }
 
-    public void CreateTiles(JsonData map)
+    /// <summary>
+    /// 获取mapItem数据
+    /// </summary>
+    /// <param name="map"></param>
+    private void GetMapItemAttribute(JsonData map)
     {
         mapType = (MapType)Enum.Parse(typeof(MapType), (string)map["MapType"]);
-        switch (mapType)
-        {
-            case MapType.Normal:
-                CreateMapItem(map, mapMgr.mapCreatePoint, mapMgr.mapParent, mapMgr.mapCreatePoint.position);
-                break;
-            case MapType.Rotate:
-                Vector3 mapPos = CalRotatePoint(map);
-                CreateMapItem(map, mapMgr.mapCreatePoint, mapMgr.mapParent, mapPos);
-                break;
-        }
+        tiles = map["Tiles"];
     }
 
     /// <summary>
     /// 创建MapItem
     /// </summary>
-    /// <param name="data"></param>
-    /// <param name="mapCreatePoint"></param>
-    /// <param name="parent"></param>
-    /// <param name="mapPos"></param>
-    private void CreateMapItem(JsonData data, Transform mapCreatePoint, Transform parent, Vector3 mapPos)
+    /// <param name="map"></param>
+    public void CreateMapItem(JsonData map)
     {
+        GetMapItemAttribute(map);
+        //创建MapItem物体，作为瓷砖父物体
         mapItem = new GameObject("MapItem").transform;
-        JsonData tiles = data["Tiles"];
-        mapItem.position = mapPos;
-        mapItem.eulerAngles = CalMapItemAngle(tiles);
-        mapItem.SetParent(parent);
-
+        mapItem.position = CalRotatePoint(map);
+        mapItem.eulerAngles = mapMgr.mapCreatePoint.eulerAngles;
+        mapItem.SetParent(mapMgr.mapParent);
+        //进入该mapItem的时间
         float enterTime = mapMgr.mapTime + mapMgr.tileWidth / 2;
-
+        //创建瓷砖
         foreach (JsonData tile in tiles)
         {
-            TileType tileType = (TileType)Enum.Parse(typeof(TileType), (string)tile["TileType"]);
-            float time = (float)(double)tile["Time"];
-            float distance = (time - mapMgr.mapTime) * mapMgr.speed;
-            ChangeMapCreatePoint(tileType);
-            CreateTile(distance, tileType);
-            mapMgr.mapTime = time;
+            CreateTile(tile);
         }
-        MapType mapType = (MapType)Enum.Parse(typeof(MapType), (string)data["MapType"]);
-        if (mapType == MapType.Rotate)
+        //根据mapType做相应处理
+        if(mapType == MapType.Rotate)
         {
-            string rotateAxis = (string)data["RotateAxis"];
-            float rotateSpeed = (float)(double)data["RotateSpeed"];
+            float stayTime = mapMgr.mapTime - enterTime - mapMgr.tileWidth / 2;
+            string rotateAxis = (string)map["RotateAxis"];
+            float rotateSpeed = (float)(double)map["RotateSpeed"];
+            //根据旋转时间计算离开mapItem时mapCreatePoint的位置与方向
+            CalRotatedMapPoint(mapItem, stayTime, rotateAxis, rotateSpeed);
+            //添加旋转事件到update中
             AddRotateAction(mapItem, rotateAxis, rotateSpeed);
-            CalRotatedMapPoint(mapCreatePoint, mapItem, mapMgr.mapTime - enterTime, rotateAxis, rotateSpeed);
+            //根据进入mapItem的时间往回转到开始时间的角度
             SetStartRotate(mapItem, rotateAxis, rotateSpeed, enterTime);
-        }
-        else if (mapType == MapType.Move)
-        {
-
         }
     }
 
+    /// <summary>
+    /// 创造瓷砖
+    /// </summary>
+    /// <param name="data"></param>
+    private void CreateTile(JsonData data)
+    {
+        //获取data内数据
+        TileType tileType = (TileType)Enum.Parse(typeof(TileType), data["TileType"].ToString());
+        float tileTime = (float)(double)data["Time"];
+        //改变MapCreatePoint位置及方向，计算瓷砖长度
+        ChangeMapCreatePoint(tileType);
+        float cubeLength = CalCubeLength(tileType, tileTime);
+
+        GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        Vector3 startPos = mapMgr.mapCreatePoint.position;
+        Vector3 targetPos = startPos + mapMgr.mapCreatePoint.forward * cubeLength;
+
+        //左右跳的瓷砖
+        if(tileType == TileType.LeftJump || tileType == TileType.RightJump)
+        {
+            cube.transform.localScale = new Vector3(mapMgr.tileWidth, 0.1f, cubeLength + mapMgr.speed * PlayerModel.Instance.JumpDeviationTime);
+            cube.transform.position = startPos + (targetPos - startPos) / 2 + mapMgr.mapCreatePoint.forward * mapMgr.tileWidth / 2
+                - mapMgr.mapCreatePoint.forward * mapMgr.speed * PlayerModel.Instance.JumpDeviationTime / 2;
+        }
+        //正常的瓷砖
+        else if (tileType == TileType.None || tileType == TileType.Normal)
+        {
+            cube.transform.localScale = new Vector3(mapMgr.tileWidth, 0.1f, cubeLength);
+            cube.transform.position = startPos + (targetPos - startPos) / 2 + mapMgr.mapCreatePoint.forward * mapMgr.tileWidth / 2;
+        }
+        //第一块瓷砖
+        if (mapMgr.mapTime == 0)
+        {
+            cube.transform.localScale = new Vector3(mapMgr.tileWidth, 0.1f, cubeLength + mapMgr.tileWidth);
+            cube.transform.position = startPos + (targetPos - startPos) / 2;
+        }
+
+        cube.transform.eulerAngles = mapMgr.mapCreatePoint.eulerAngles;
+        cube.AddComponent<BoxCollider>();
+        cube.transform.SetParent(mapItem);
+        mapMgr.mapCreatePoint.position = targetPos;
+        mapMgr.mapTime = tileTime;
+    }
+
+    /// <summary>
+    /// 计算瓷砖长度
+    /// </summary>
+    /// <param name="tileType"></param>
+    /// <param name="tileTime"></param>
+    /// <returns></returns>
+    private float CalCubeLength(TileType tileType, float tileTime)
+    {
+        float time = 0;
+        if (tileType == TileType.None || tileType == TileType.Normal)
+            time = tileTime - mapMgr.mapTime;
+        else if (tileType == TileType.LeftJump || tileType == TileType.RightJump)
+        {
+            time = tileTime - mapMgr.mapTime - PlayerModel.Instance.StandJumpTime;
+        } 
+        else
+            Debug.LogError("还没有处理该" + tileType + "的方法");
+        if (time <= 0)
+        {
+            Debug.LogError("cubeLength <= 0");
+            Debug.Log(tileTime);
+        }
+            
+        
+        return time * PlayerModel.Instance.Speed;
+    }
 
     private Vector3 CalMapItemAngle(JsonData tiles)
     {
@@ -117,15 +176,15 @@ public class MapItem
     /// <summary>
     /// 获取旋转后的MapCreatePoint，好接着该point继续生成地图
     /// </summary>
-    private void CalRotatedMapPoint(Transform mapCreatePoint, Transform mapItem, float rotateTime, string rotateAxis, float rotateSpeed)
+    private void CalRotatedMapPoint(Transform mapItem, float rotateTime, string rotateAxis, float rotateSpeed)
     {
-        mapCreatePoint.SetParent(mapItem);
+        mapMgr.mapCreatePoint.SetParent(mapItem);
         Vector3 startAngle = mapItem.localEulerAngles;
         if (rotateAxis == "Y")
             mapItem.Rotate(new Vector3(0, rotateSpeed * (rotateTime + mapMgr.tileWidth / 2), 0));
         if (rotateAxis == "Z")
             mapItem.Rotate(new Vector3(0, 0, rotateSpeed * (rotateTime + mapMgr.tileWidth / 2)));
-        mapCreatePoint.parent = null;
+        mapMgr.mapCreatePoint.parent = null;
         mapItem.localEulerAngles = startAngle;
     }
 
@@ -137,13 +196,16 @@ public class MapItem
     /// <returns></returns>
     private Vector3 CalRotatePoint(JsonData map)
     {
+        if(mapType == MapType.Normal)
+            return mapMgr.mapCreatePoint.position;
+
         RotatePoint rotatePoint = (RotatePoint)Enum.Parse(typeof(RotatePoint), (string)map["RotatePoint"]);
         if (rotatePoint == RotatePoint.Start)
             return mapMgr.mapCreatePoint.position;
 
         //mapCreatePoint是引用类型，操作之后要改成初始状态
         Vector3 startPos = mapMgr.mapCreatePoint.position;
-        Vector3 startDir = mapMgr.mapCreatePoint.forward;
+        Vector3 startAngle = mapMgr.mapCreatePoint.eulerAngles;
         bool startIsLeft = mapMgr.isLeft;
         float startTime = mapMgr.mapTime;
 
@@ -157,12 +219,11 @@ public class MapItem
             mapMgr.mapTime = time;
 
             mapMgr.mapCreatePoint.position = targetPos;
-
         }
         Vector3 endPos = mapMgr.mapCreatePoint.position;
         //mapCreatePoint是引用类型，操作之后要改成初始状态
         mapMgr.mapCreatePoint.position = startPos;
-        mapMgr.mapCreatePoint.forward = startDir;
+        mapMgr.mapCreatePoint.eulerAngles = startAngle;
         mapMgr.isLeft = startIsLeft;
         mapMgr.mapTime = startTime;
 
@@ -172,48 +233,12 @@ public class MapItem
         }
         Debug.LogWarning("没有处理该rotatePoint的方法");
         return Vector3.zero;
-
     }
-
-
 
     /// <summary>
-    /// 创建地图Tile
+    /// 改变MapCreatePoint
     /// </summary>
-    private void CreateTile(float distance, TileType tileType)
-    {
-        //根据方向与距离创建地图块，设置位置与角度，父物体，添加碰撞器
-        Vector3 targetPos = mapMgr.mapCreatePoint.position + mapMgr.mapCreatePoint.forward * distance;
-        GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        cube.transform.position = mapMgr.mapCreatePoint.position + (targetPos - mapMgr.mapCreatePoint.position) / 2 + 
-            mapMgr.mapCreatePoint.forward * mapMgr.tileWidth / 2;
-        cube.transform.localScale = new Vector3(mapMgr.tileWidth, 0.1f, distance);
-        //当左右跳是生成的瓷砖会稍微长一些
-        if(tileType == TileType.LeftJump || tileType  == TileType.RightJump)
-        {
-            targetPos = mapMgr.mapCreatePoint.position + mapMgr.mapCreatePoint.forward * (distance - mapMgr.speed * PlayerModel.Instance.StandJumpTime);
-            cube.transform.localScale = new Vector3(mapMgr.tileWidth, 0.1f, distance + mapMgr.speed * (0.4f - PlayerModel.Instance.StandJumpTime)) +
-            mapMgr.mapCreatePoint.forward * mapMgr.tileWidth / 2;
-            cube.transform.position = mapMgr.mapCreatePoint.position + (targetPos - mapMgr.mapCreatePoint.position) / 2 +
-                mapMgr.mapCreatePoint.forward * mapMgr.tileWidth / 2 - mapMgr.mapCreatePoint.forward * mapMgr.speed * 0.2f;
-        }
-        if (mapType == MapType.Rotate)
-        {
-            cube.transform.localScale = new Vector3(mapMgr.tileWidth, 0.09f, distance);
-        }
-        //第一块瓷砖比较特殊
-        if (mapMgr.firstTile)
-        {
-            cube.transform.position = mapMgr.mapCreatePoint.position + (targetPos - mapMgr.mapCreatePoint.position) / 2;
-            cube.transform.localScale = new Vector3(mapMgr.tileWidth, 0.1f, distance + mapMgr.tileWidth);
-            mapMgr.firstTile = false;
-        }
-        cube.transform.eulerAngles = mapMgr.mapCreatePoint.eulerAngles;
-        cube.AddComponent<BoxCollider>();
-        mapMgr.mapCreatePoint.position = targetPos;
-        cube.transform.SetParent(mapItem);
-    }
-
+    /// <param name="tileType"></param>
     private void ChangeMapCreatePoint(TileType tileType)
     {
         switch (tileType)
@@ -233,7 +258,7 @@ public class MapItem
                 break;
             case TileType.RightJump:
                 mapMgr.mapCreatePoint.position = mapMgr.mapCreatePoint.position +
-    mapMgr.mapCreatePoint.right * mapMgr.jumpWidth;
+                    mapMgr.mapCreatePoint.right * mapMgr.jumpWidth;
                 break;
         }
     }

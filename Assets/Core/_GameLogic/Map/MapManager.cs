@@ -77,7 +77,7 @@ public class MapManager {
         {
             MapItem mapItem = new MapItem();
             mapItem.Init(this);
-            mapItem.CreateTiles(map);
+            mapItem.CreateMapItem(map);
             mapItems.Add(mapItem);
         }
     }

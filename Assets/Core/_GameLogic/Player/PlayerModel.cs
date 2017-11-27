@@ -17,6 +17,12 @@ public class PlayerModel : Singleton<PlayerModel> {
         get { return standJumpTime; }
     }
 
+    private float jumpDeviationTime;
+    public float JumpDeviationTime
+    {
+        get { return jumpDeviationTime; }
+    }
+
     public override void Initialize()
     {
         base.Initialize();
@@ -34,5 +40,6 @@ public class PlayerModel : Singleton<PlayerModel> {
         JsonData rootJson = JsonMapper.ToObject(jsonText);
         speed = (float)(double)rootJson["PlayerSpeed"];
         standJumpTime = (float)(double)rootJson["StandJumpTime"];
+        jumpDeviationTime = (float)(double)rootJson["JumpDeviationTime"];
     }
 }
